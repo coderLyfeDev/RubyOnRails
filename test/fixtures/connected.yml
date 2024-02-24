@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  requested_date: 2024-02-22 14:32:52
+  requestor: 
+  user1: 
+  user2: 
+
+two:
+  requested_date: 2024-02-22 14:32:52
+  requestor: 
+  user1: 
+  user2: 

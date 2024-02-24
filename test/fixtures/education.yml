@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  degree: false
+  graduated: false
+  highest_degree: false
+  school_name: MyString
+  state: MyString
+  user_id: 
+
+two:
+  degree: false
+  graduated: false
+  highest_degree: false
+  school_name: MyString
+  state: MyString
+  user_id: 

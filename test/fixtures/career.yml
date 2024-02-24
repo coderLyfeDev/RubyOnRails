@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  category: MyString
+  salary_range: MyString
+  sub_category: MyString
+
+two:
+  category: MyString
+  salary_range: MyString
+  sub_category: MyString
