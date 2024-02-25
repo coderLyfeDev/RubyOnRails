@@ -18,7 +18,7 @@ class Api::V1::WorkHistoriesController < ApplicationController
     @work_history = WorkHistory.new(work_history_params)
 
     if @work_history.save
-      render json: @work_history, status: :created, location: @work_history
+      render json: @work_history, status: :created, location: api_v1_work_history_url(@work_history)
     else
       render json: @work_history.errors, status: :unprocessable_entity
     end
@@ -46,6 +46,6 @@ class Api::V1::WorkHistoriesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def work_history_params
-      params.require(:work_history).permit(:current_position, :employer_name, :end_date, :location, :position, :start_date, :user_id)
+      params.require(:work_history).permit(:id, :current_position, :employer_name, :end_date, :location, :position, :start_date, :user_id)
     end
 end

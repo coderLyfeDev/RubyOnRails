@@ -1,4 +1,4 @@
-class UserInfosController < ApplicationController
+class Api::V1::UserInfosController < ApplicationController
   before_action :set_user_info, only: %i[ show update destroy ]
 
   # GET /user_infos
@@ -16,9 +16,8 @@ class UserInfosController < ApplicationController
   # POST /user_infos
   def create
     @user_info = UserInfo.new(user_info_params)
-
     if @user_info.save
-      render json: @user_info, status: :created, location: @user_info
+      render json: @user_info, status: :created, location: api_v1_user_info_url(@user_info)
     else
       render json: @user_info.errors, status: :unprocessable_entity
     end

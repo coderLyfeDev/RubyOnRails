@@ -18,7 +18,7 @@ class Api::V1::CareerInterestsController < ApplicationController
     @career_interest = CareerInterest.new(career_interest_params)
 
     if @career_interest.save
-      render json: @career_interest, status: :created, location: @career_interest
+      render json: @career_interest, status: :created, location: api_v1_career_interests_url(@career_interest)
     else
       render json: @career_interest.errors, status: :unprocessable_entity
     end
@@ -46,6 +46,6 @@ class Api::V1::CareerInterestsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def career_interest_params
-      params.require(:career_interest).permit(:career_id, :user_id)
+      params.require(:career_interest).permit(:id, :career_id, :user_id)
     end
 end
