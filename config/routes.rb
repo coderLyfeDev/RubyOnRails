@@ -5,7 +5,9 @@ Rails.application.routes.draw do
       resources :user_infos
       resources :user_roles
       resources :careers
-      resources :career_interests
+      resources :career_interests do
+        delete 'delete_by_user_and_career', on: :collection
+      end
       resources :connecteds
       resources :work_histories
       resources :posts

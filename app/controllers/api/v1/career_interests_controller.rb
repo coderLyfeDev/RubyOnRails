@@ -33,9 +33,24 @@ class Api::V1::CareerInterestsController < ApplicationController
     end
   end
 
-  # DELETE /career_interests/1
+  #DELETE /career_interests/1
   def destroy
     @career_interest.destroy!
+  end
+
+  def delete_by_user_and_career
+    user_id = params[:user_id]
+    career_id = params[:career_id]
+
+    # Find and destroy the CareerInterest based on user_id and career_id
+    @career_interest = CareerInterest.find_by(user_id: user_id, career_id: career_id)
+    
+    if @career_interest
+      @career_interest.destroy!
+      head :no_content
+    else
+      render json: { error: 'CareerInterest not found' }, status: :not_found
+    end
   end
 
   private
