@@ -23,6 +23,21 @@ class Api::V1::UserInfosController < ApplicationController
     end
   end
 
+  def login
+    email = params[:user_info][:email]
+    password = params[:user_info][:password]
+
+    # Find the user based on email
+    user = UserInfo.find_by(email: email)
+
+    if user && user.password == password
+      render json: { message: 'Login successful', user: user }
+    else
+      render json: { error: 'Invalid email or password' }, status: :unauthorized
+    end
+  end
+
+
   # PATCH/PUT /user_infos/1
   def update
     if @user_info.update(user_info_params)

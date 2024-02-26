@@ -14,6 +14,14 @@ class Api::V1::EducationsController < ApplicationController
     render json: @education
   end
 
+   # GET /educations/get_by_user
+   def get_by_user
+    user_id = params[:user_id]
+    @educations = Education.where(user_id: user_id)
+
+    render json: @educations
+  end
+
   # POST /educations
   def create
     @education = Education.new(education_params)

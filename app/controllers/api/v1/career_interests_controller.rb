@@ -13,6 +13,21 @@ class Api::V1::CareerInterestsController < ApplicationController
     render json: @career_interest
   end
 
+   # GET /career_interest/get_by_user
+   def get_by_user
+    user_id = params[:user_id]
+    @career_interest = CareerInterest.where(user_id: user_id)
+    careers_info = @career_interest.map do |interest|
+      {
+        career_id: interest.career_id,
+        sub_category: interest.career.sub_category,
+        category: interest.career.category,
+      }
+    end
+
+    render json: careers_info
+  end
+
   # POST /career_interests
   def create
     @career_interest = CareerInterest.new(career_interest_params)

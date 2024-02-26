@@ -13,6 +13,14 @@ class Api::V1::WorkHistoriesController < ApplicationController
     render json: @work_history
   end
 
+     # GET /work_histories/get_by_user
+     def get_by_user
+      user_id = params[:user_id]
+      @work_history = WorkHistory.where(user_id: user_id)
+  
+      render json: @work_history
+    end
+
   # POST /work_histories
   def create
     @work_history = WorkHistory.new(work_history_params)

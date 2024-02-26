@@ -1,15 +1,24 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
-      resources :educations
-      resources :user_infos
+      resources :educations do
+        get 'get_by_user', on: :collection
+      end
+      resources :user_infos do
+        collection do
+          post 'login'
+        end
+      end
       resources :user_roles
       resources :careers
       resources :career_interests do
         delete 'delete_by_user_and_career', on: :collection
+        get 'get_by_user', on: :collection
       end
       resources :connecteds
-      resources :work_histories
+      resources :work_histories do
+        get 'get_by_user', on: :collection
+      end
       resources :posts
     end
   end
