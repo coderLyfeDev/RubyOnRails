@@ -1,6 +1,11 @@
 class Api::V1::UserInfosController < ApplicationController
   before_action :set_user_info, only: %i[ show update destroy ]
 
+  ############# TODO ##############
+  #1. Implement some form of encryption for password
+  #2. Delete profile picture upon uploading a new one.
+  #################################
+
   # GET /user_infos
   def index
     @user_infos = UserInfo.all
