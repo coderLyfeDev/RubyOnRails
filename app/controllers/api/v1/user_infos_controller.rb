@@ -15,23 +15,47 @@ class Api::V1::UserInfosController < ApplicationController
 
   # POST /user_infos
   def create
-    @user_info = UserInfo.new(user_info_params)
-    if @user_info.save
-      render json: @user_info, status: :created, location: api_v1_user_info_url(@user_info)
+    email = params[:email]
+  
+    @user_info = UserInfo.find_by(email: email)
+  
+    if @user_info.nil?
+      # User doesn't exist, create a new one
+      puts "Creating a new user..."
+      @user_info = UserInfo.new(user_info_params)
+  
+      if @user_info.save
+        profile_picture_url = @user_info.profile_picture.attached? ? url_for(@user_info.profile_picture) : nil
+        render json: { user_info: { user_id: @user_info.id, profile_picture: profile_picture_url }, message: 'User created successfully' }, status: :created
+      else
+        render json: { error: 'Failed to create user', details: @user_info.errors.full_messages }, status: :unprocessable_entity
+      end
     else
-      render json: @user_info.errors, status: :unprocessable_entity
+      puts "User already exists..."
+      render json: { message: 'User already exists' }
     end
   end
+  
 
   def login
-    email = params[:user_info][:email]
-    password = params[:user_info][:password]
+    user_info_params = params.require(:user_info).permit(:email, :password)
+    email = user_info_params[:email]
+    password = user_info_params[:password]
 
-    # Find the user based on email
-    user = UserInfo.find_by(email: email)
+    user = UserInfo.select(:id, :name, :email, :password).find_by(email: email)
 
     if user && user.password == password
-      render json: { message: 'Login successful', user: user }
+      user_data = {
+      user_id: user.id,
+      name: user.name,
+      email: user.email
+    }
+
+    # Add profile picture URL if it exists
+    if user.profile_picture.attached?
+      user_data[:profile_picture] = rails_blob_path(user.profile_picture, only_path: true)
+    end
+      render json: { message: 'Login successful', user: user_data }
     else
       render json: { error: 'Invalid email or password' }, status: :unauthorized
     end
@@ -41,7 +65,11 @@ class Api::V1::UserInfosController < ApplicationController
   # PATCH/PUT /user_infos/1
   def update
     if @user_info.update(user_info_params)
-      render json: @user_info
+      if params[:profile_picture].present?
+        @user_info.profile_picture.attach(params[:profile_picture])
+      end
+        profile_picture_url = @user_info.profile_picture.attached? ? url_for(@user_info.profile_picture) : nil
+        render json: { user_info: { user_id: @user_info.id, profile_picture: profile_picture_url }, message: 'User updated successfully' }
     else
       render json: @user_info.errors, status: :unprocessable_entity
     end
@@ -60,6 +88,6 @@ class Api::V1::UserInfosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_info_params
-      params.require(:user_info).permit(:name, :email, :password, :profile_picture, :role)
+      params.require(:user_info).permit(:id, :name, :email, :password, :profile_picture, :role)
     end
 end
