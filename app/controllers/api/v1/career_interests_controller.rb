@@ -16,7 +16,7 @@ class Api::V1::CareerInterestsController < ApplicationController
    # GET /career_interest/get_by_user
    def get_by_user
     user_id = params[:user_id]
-    @career_interest = CareerInterest.where(user_id: user_id)
+    @career_interest = CareerInterest.where(user_info_id: user_id)
     careers_info = @career_interest.map do |interest|
       {
         career_id: interest.career_id,
@@ -76,6 +76,6 @@ class Api::V1::CareerInterestsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def career_interest_params
-      params.require(:career_interest).permit(:id, :career_id, :user_id)
+      params.require(:career_interest).permit(:id, :career_id, :user_info_id)
     end
 end

@@ -16,7 +16,7 @@ class Api::V1::WorkHistoriesController < ApplicationController
      # GET /work_histories/get_by_user
      def get_by_user
       user_id = params[:user_id]
-      @work_history = WorkHistory.where(user_id: user_id)
+      @work_history = WorkHistory.where(user_info_id: user_id)
   
       render json: @work_history
     end
@@ -54,6 +54,6 @@ class Api::V1::WorkHistoriesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def work_history_params
-      params.require(:work_history).permit(:id, :current_position, :employer_name, :end_date, :location, :position, :start_date, :user_id)
+      params.require(:work_history).permit(:id, :current_position, :employer_name, :end_date, :location, :position, :start_date, :user_info_id)
     end
 end

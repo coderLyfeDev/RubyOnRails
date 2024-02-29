@@ -38,6 +38,18 @@ class Api::V1::CareersController < ApplicationController
     @career.destroy!
   end
 
+
+  #Get not Interest careers
+  def careers_not_interested
+    userId = params[:userId]
+
+    careers_not_interested = Career.left_joins(:career_interests)
+                                   .where('career_interest.career_id IS NULL OR career_interest.user_info_id != ?', userId)
+                                   .select('career.*')
+
+    render json: careers_not_interested
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_career

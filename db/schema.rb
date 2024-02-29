@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_27_072451) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_29_013717) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,7 +52,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_27_072451) do
 
   create_table "career_interest", force: :cascade do |t|
     t.bigint "career_id"
-    t.bigint "user_id"
+    t.bigint "user_info_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -72,7 +72,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_27_072451) do
     t.boolean "highest_degree"
     t.string "school_name"
     t.string "state"
-    t.bigint "user_id"
+    t.bigint "user_info_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -121,7 +121,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_27_072451) do
     t.string "location"
     t.string "position"
     t.datetime "start_date", precision: nil
-    t.bigint "user_id"
+    t.bigint "user_info_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -129,7 +129,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_27_072451) do
   add_foreign_key "active_storage_attachment", "active_storage_blob", column: "blob_id"
   add_foreign_key "active_storage_variant_record", "active_storage_blob", column: "blob_id"
   add_foreign_key "career_interest", "career"
-  add_foreign_key "career_interest", "user_info", column: "user_id"
-  add_foreign_key "education", "user_info", column: "user_id"
-  add_foreign_key "work_history", "user_info", column: "user_id"
+  add_foreign_key "career_interest", "user_info"
+  add_foreign_key "education", "user_info"
+  add_foreign_key "work_history", "user_info"
 end

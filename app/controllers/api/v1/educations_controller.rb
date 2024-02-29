@@ -17,7 +17,7 @@ class Api::V1::EducationsController < ApplicationController
    # GET /educations/get_by_user
    def get_by_user
     user_id = params[:user_id]
-    @educations = Education.where(user_id: user_id)
+    @educations = Education.where(user_id: user_info_id)
 
     render json: @educations
   end
@@ -25,7 +25,6 @@ class Api::V1::EducationsController < ApplicationController
   # POST /educations
   def create
     @education = Education.new(education_params)
-    puts "Hello, world!"
     if @education.save
       render json: @education, status: :created, location: api_v1_education_url(@education)
     else
@@ -55,6 +54,6 @@ class Api::V1::EducationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def education_params
-      params.require(:education).permit(:id, :degree, :graduated, :highest_degree, :school_name, :state, :user_id)
+      params.require(:education).permit(:id, :degree, :graduated, :highest_degree, :school_name, :state, :user_info_id)
     end
 end

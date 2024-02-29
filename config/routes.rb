@@ -10,7 +10,9 @@ Rails.application.routes.draw do
         end
       end
       resources :user_roles
-      resources :careers
+      resources :careers do
+        get 'not_interested/:userId', to: 'careers#careers_not_interested', on: :collection
+      end
       resources :career_interests do
         delete 'delete_by_user_and_career', on: :collection
         get 'get_by_user', on: :collection
