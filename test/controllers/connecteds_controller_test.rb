@@ -12,7 +12,7 @@ class ConnectedsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create connected" do
     assert_difference("Connected.count") do
-      post connecteds_url, params: { connected: { requested_date: @connected.requested_date, requestor: @connected.requestor, user1: @connected.user1, user2: @connected.user2 } }, as: :json
+      post connecteds_url, params: { connected: { connections: @connected.connections, user_info_id: @connected.user_info_id } }, as: :json
     end
 
     assert_response :created
@@ -24,7 +24,7 @@ class ConnectedsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update connected" do
-    patch connected_url(@connected), params: { connected: { requested_date: @connected.requested_date, requestor: @connected.requestor, user1: @connected.user1, user2: @connected.user2 } }, as: :json
+    patch connected_url(@connected), params: { connected: { connections: @connected.connections, user_info_id: @connected.user_info_id } }, as: :json
     assert_response :success
   end
 

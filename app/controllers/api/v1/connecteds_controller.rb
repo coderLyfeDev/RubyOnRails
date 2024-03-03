@@ -1,4 +1,4 @@
-class ConnectedsController < ApplicationController
+class Api::V1::ConnectedsController < ApplicationController
   before_action :set_connected, only: %i[ show update destroy ]
 
   # GET /connecteds
@@ -13,10 +13,29 @@ class ConnectedsController < ApplicationController
     render json: @connected
   end
 
+  def get_by_user
+    user_info_id_param = params[:user_info_id]
+  
+    if user_info_id_param.present?
+      @connected = Connected.find_by(user_info_id: user_info_id_param)
+      render json: @connected
+      puts "-----------------------------------------------"
+      puts user_info_id_param
+      puts @connected
+    end
+  end
+
   # POST /connecteds
   def create
-    @connected = Connected.new(connected_params)
+    user_info_id_param = params[:user_info]
 
+    if user_info_id_param.present?
+      connections = Connected.get_connections(user_info_id_param)
+      puts "-----------------------------------------------"
+      puts user_info_id_param
+      puts connections
+    #@connected = Connected.new(connected_params)
+    end
     if @connected.save
       render json: @connected, status: :created, location: @connected
     else
@@ -46,6 +65,6 @@ class ConnectedsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def connected_params
-      params.require(:connected).permit(:requested_date, :requestor, :user1, :user2)
+      params.require(:connected).permit(:connections, :user_info_id)
     end
 end

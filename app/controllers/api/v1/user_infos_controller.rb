@@ -66,6 +66,17 @@ class Api::V1::UserInfosController < ApplicationController
     end
   end
 
+  def search_users_with_details
+    name_param = params[:name]
+
+    if name_param.present?
+      users_with_details = UserInfo.search_by_name_with_details(name_param)
+      render json: { users_with_details: users_with_details }
+    else
+      render json: { error: 'Name parameter is required' }, status: :unprocessable_entity
+    end
+  end
+
 
   # PATCH/PUT /user_infos/1
   def update

@@ -17,7 +17,7 @@ class Api::V1::EducationsController < ApplicationController
    # GET /educations/get_by_user
    def get_by_user
     user_id = params[:user_id]
-    @educations = Education.where(user_id: user_info_id)
+    @educations = Education.where(user_info_id: user_id)
 
     render json: @educations
   end

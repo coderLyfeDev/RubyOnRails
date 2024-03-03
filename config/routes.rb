@@ -8,6 +8,9 @@ Rails.application.routes.draw do
         collection do
           post 'login'
         end
+        collection do
+          get 'search_users_with_details'
+        end
       end
       resources :user_roles
       resources :careers do
@@ -17,11 +20,14 @@ Rails.application.routes.draw do
         delete 'delete_by_user_and_career', on: :collection
         get 'get_by_user', on: :collection
       end
-      resources :connecteds
       resources :work_histories do
         get 'get_by_user', on: :collection
       end
       resources :posts
+      resources :connecteds do
+        post 'create_connection'
+        get 'get_by_user', on: :collection
+      end
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_29_013717) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_01_200439) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -58,10 +58,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_013717) do
   end
 
   create_table "connected", force: :cascade do |t|
-    t.datetime "requested_date", precision: nil
-    t.bigint "requestor"
-    t.bigint "user1"
-    t.bigint "user2"
+    t.string "connections"
+    t.bigint "user_info_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -130,6 +128,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_29_013717) do
   add_foreign_key "active_storage_variant_record", "active_storage_blob", column: "blob_id"
   add_foreign_key "career_interest", "career"
   add_foreign_key "career_interest", "user_info"
+  add_foreign_key "connected", "user_info"
   add_foreign_key "education", "user_info"
   add_foreign_key "work_history", "user_info"
 end
