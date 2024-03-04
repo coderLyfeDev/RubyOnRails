@@ -25,7 +25,6 @@ Rails.application.routes.draw do
       end
       resources :posts
       resources :connecteds do
-        post 'create_connection'
         get 'get_by_user', on: :collection
       end
     end

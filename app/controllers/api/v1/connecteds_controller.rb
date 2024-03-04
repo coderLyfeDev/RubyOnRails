@@ -19,27 +19,47 @@ class Api::V1::ConnectedsController < ApplicationController
     if user_info_id_param.present?
       @connected = Connected.find_by(user_info_id: user_info_id_param)
       render json: @connected
-      puts "-----------------------------------------------"
-      puts user_info_id_param
-      puts @connected
+    else
+      render json: @connected.errors, status: :unprocessable_entity
     end
   end
 
   # POST /connecteds
   def create
-    user_info_id_param = params[:user_info]
-
-    if user_info_id_param.present?
-      connections = Connected.get_connections(user_info_id_param)
+    user_info_id = params[:user_info_id]
+    conn_id = params[:conn_id]
+    puts "-----------------------------------------------"
+    puts user_info_id
+    puts conn_id
+    if user_info_id.present? && conn_id.present?
+      puts "Both ids present"
+      @user_info = Connected.find_by(user_info_id: user_info_id)
+      puts @user_info
+      @conn_id = Connected.find_by(user_info_id: conn_id)
+      puts @conn_id
+      
+      if @user_info.nil?
+        puts "Creating new user"
+        @user_info = Connected.new(user_info_id: user_info_id, connections: conn_id.to_s)
+      else
+        puts "Updating user connections"
+        @user_info.connections +=","+conn_id.to_s
+      end
+      if @conn_id.nil?
+        puts "Creating new user"
+        @conn_id = Connected.new(user_info_id: conn_id, connections: user_info_id.to_s)
+      else
+        puts "Updating user connections"
+        @conn_id.connections +=","+user_info_id.to_s
+      end
       puts "-----------------------------------------------"
-      puts user_info_id_param
-      puts connections
-    #@connected = Connected.new(connected_params)
+      puts @user_info
+      puts @conn_id
     end
-    if @connected.save
-      render json: @connected, status: :created, location: @connected
+    if @user_info.save && @conn_id.save
+      render json: { user_info: @connected_user_info, conn_info: @connected_conn_id }, status: :created
     else
-      render json: @connected.errors, status: :unprocessable_entity
+      render json: @user_info.errors, status: :unprocessable_entity
     end
   end
 
@@ -65,6 +85,6 @@ class Api::V1::ConnectedsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def connected_params
-      params.require(:connected).permit(:connections, :user_info_id)
+      params.require(:connected).permit(:connections, :user_info_id, conn_id)
     end
 end
