@@ -7,6 +7,7 @@ class UserInfo < ApplicationRecord
 
     def self.search_by_name_with_details(name)
         where("name ILIKE ?", "%#{name}%")
+          .with_attached_profile_picture 
           .includes(:work_histories, :educations)
           .map do |user|
             {
@@ -14,7 +15,8 @@ class UserInfo < ApplicationRecord
               email: user.email,
               name: user.name,
               work_history_employer_name: user.work_histories.pluck(:employer_name),
-              work_history_position: user.work_histories.pluck(:position)
+              work_history_position: user.work_histories.pluck(:position),
+              profile_picture_url: user.profile_picture.attached? ? Rails.application.routes.url_helpers.url_for(user.profile_picture) : nil
             }
           end
       end

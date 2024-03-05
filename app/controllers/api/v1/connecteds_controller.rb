@@ -28,15 +28,9 @@ class Api::V1::ConnectedsController < ApplicationController
   def create
     user_info_id = params[:user_info_id]
     conn_id = params[:conn_id]
-    puts "-----------------------------------------------"
-    puts user_info_id
-    puts conn_id
     if user_info_id.present? && conn_id.present?
-      puts "Both ids present"
       @user_info = Connected.find_by(user_info_id: user_info_id)
-      puts @user_info
       @conn_id = Connected.find_by(user_info_id: conn_id)
-      puts @conn_id
       
       if @user_info.nil?
         puts "Creating new user"
@@ -52,9 +46,6 @@ class Api::V1::ConnectedsController < ApplicationController
         puts "Updating user connections"
         @conn_id.connections +=","+user_info_id.to_s
       end
-      puts "-----------------------------------------------"
-      puts @user_info
-      puts @conn_id
     end
     if @user_info.save && @conn_id.save
       render json: { user_info: @connected_user_info, conn_info: @connected_conn_id }, status: :created

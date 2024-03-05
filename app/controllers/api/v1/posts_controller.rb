@@ -15,16 +15,12 @@ class Api::V1::PostsController < ApplicationController
 
   def get_by_user
     connections = params[:connections]
-    puts "---------Getting connections-------------"
-    puts connections
+    puts "---------Getting newsfeed-------------"
     if connections.present?
       connections_array = connections.split(',').map(&:to_i)
       @post = Post.includes(user_info: { profile_picture_attachment: :blob }).where("user_info_id IN (?)", connections_array).to_a
-      puts @post.length
       postContext = @post.map do |p|
-        puts p.attributes
         profile_picture_url = p.user_info.profile_picture.attached? ? url_for(p.user_info.profile_picture) : nil
-        puts "Post ID: #{p.id}, UserInfo ID: #{p.user_info.id}, Profile Picture URL: #{profile_picture_url}"
         {
           post_id: p.id,
           user_info_id: p.user_info.id,
@@ -36,7 +32,6 @@ class Api::V1::PostsController < ApplicationController
           post_likes: p.likes,
           post_comments: p.comments,
           post_shares: p.shares,
-          # Add other attributes as needed
         }
       end
       render json: postContext

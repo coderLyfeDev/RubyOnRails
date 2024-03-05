@@ -58,7 +58,8 @@ class Api::V1::UserInfosController < ApplicationController
 
     # Add profile picture URL if it exists
     if user.profile_picture.attached?
-      user_data[:profile_picture] = rails_blob_path(user.profile_picture, only_path: true)
+      #user_data[:profile_picture] = rails_blob_path(user.profile_picture, only_path: true)
+      user_data[:profile_picture] = Rails.application.routes.url_helpers.url_for(user.profile_picture)
     end
       render json: { message: 'Login successful', user: user_data }
     else

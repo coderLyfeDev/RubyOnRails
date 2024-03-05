@@ -42,10 +42,13 @@ class Api::V1::CareersController < ApplicationController
   #Get not Interest careers
   def careers_not_interested
     userId = params[:userId]
-
-    careers_not_interested = Career.left_joins(:career_interests)
-                                   .where('career_interest.career_id IS NULL OR career_interest.user_info_id != ?', userId)
-                                   .select('career.*')
+    if userId == 0
+      careers_not_interested = Career.all
+    else
+      careers_not_interested = Career.left_joins(:career_interests)
+                                    .where('career_interest.career_id IS NULL OR career_interest.user_info_id != ?', userId)
+                                    .select('career.*')
+    end
 
     render json: careers_not_interested
   end
