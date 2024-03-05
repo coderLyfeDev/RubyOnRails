@@ -3,6 +3,7 @@ class UserInfo < ApplicationRecord
     has_many :work_histories
     has_many :career_interest
     has_one_attached :profile_picture
+    has_many :posts
 
     def self.search_by_name_with_details(name)
         where("name ILIKE ?", "%#{name}%")

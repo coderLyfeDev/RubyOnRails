@@ -23,7 +23,9 @@ Rails.application.routes.draw do
       resources :work_histories do
         get 'get_by_user', on: :collection
       end
-      resources :posts
+      resources :posts do
+        get 'get_by_user', on: :collection
+      end
       resources :connecteds do
         get 'get_by_user', on: :collection
       end

@@ -13,6 +13,39 @@ class Api::V1::PostsController < ApplicationController
     render json: @post
   end
 
+  def get_by_user
+    connections = params[:connections]
+    puts "---------Getting connections-------------"
+    puts connections
+    if connections.present?
+      connections_array = connections.split(',').map(&:to_i)
+      @post = Post.includes(user_info: { profile_picture_attachment: :blob }).where("user_info_id IN (?)", connections_array).to_a
+      puts @post.length
+      postContext = @post.map do |p|
+        puts p.attributes
+        profile_picture_url = p.user_info.profile_picture.attached? ? url_for(p.user_info.profile_picture) : nil
+        puts "Post ID: #{p.id}, UserInfo ID: #{p.user_info.id}, Profile Picture URL: #{profile_picture_url}"
+        {
+          post_id: p.id,
+          user_info_id: p.user_info.id,
+          user_name: p.user_info.name,
+          user_email: p.user_info.email,
+          user_profile_picture: profile_picture_url,
+          post_content: p.content,
+          post_time: p.created_at,
+          post_likes: p.likes,
+          post_comments: p.comments,
+          post_shares: p.shares,
+          # Add other attributes as needed
+        }
+      end
+      render json: postContext
+    else
+      render json: @post.errors, status: :unprocessable_entity
+    end
+  end
+  
+
   # POST /posts
   def create
     @post = Post.new(post_params)
@@ -46,6 +79,6 @@ class Api::V1::PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:likes, :shares, :comments, :content, :scope, :post_type, :tagged_users, :user_id)
+      params.require(:post).permit(:likes, :shares, :comments, :content, :scope, :post_type, :tagged_users, :user_info_id, :connections)
     end
 end
